@@ -183,9 +183,14 @@ function partialUsingArguments(fn, ...args1) {
  *   getId4() => 7
  *   getId10() => 11
  */
+const mapa = {};
+
 function getIdGeneratorFunction(startFrom) {
-  const fn = startFrom + 1;
-  return () => fn;
+  if (!mapa[startFrom]) {
+    mapa[startFrom] = startFrom;
+    return () => startFrom;
+  }
+  return () => startFrom + 1;
 }
 
 

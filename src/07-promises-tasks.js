@@ -29,17 +29,14 @@
  *                                                    //  Ask her again.';
  */
 function willYouMarryMe(isPositiveAnswer) {
-  // eslint-disable-next-line no-return-assign
-  // const prom = new Promise((resolve, reject) => {
-  if (isPositiveAnswer === true) {
-    return Promise.resolve('Hooray!!! She said "Yes"!').then((val) => val);
-  } if (isPositiveAnswer === false) {
-    return Promise.reject(new Error('Oh no, she said "No".')).then((val) => val);
+  if (typeof isPositiveAnswer === 'boolean') {
+    if (isPositiveAnswer) {
+      return Promise.resolve('Hooray!!! She said "Yes"!');
+    } if (!isPositiveAnswer) {
+      return Promise.reject(new Error('Oh no, she said "No".'));
+    }
   }
-  return Promise.reject(new Error('Error: Wrong parameter is passed! Ask her again.')).catch((val) => val);
-  // });
-  // prom.then((result) => result, (result) => result)
-  // .catch(() => new Error('Error: Wrong parameter is passed! Ask her again.'));
+  return Promise.reject(new Error('Wrong parameter is passed! Ask her again.'));
 }
 console.log(willYouMarryMe(true));
 /**
@@ -81,9 +78,8 @@ function processAllPromises(array) {
  *
  */
 function getFastestPromise(array) {
-  return Promise.all(array)
-    .then((data) => data)
-    .catch((error) => error);
+  return Promise.race(array)
+    .then((data) => new Promise((resolve) => resolve(data)));
 }
 
 /**
@@ -106,7 +102,8 @@ function getFastestPromise(array) {
 function chainPromises(array, action) {
   return Promise.race(array)
     .then((data) => action(data))
-    .catch((error) => error);
+    .catch((error) => error)
+    .then((data) => new Promise((resolve) => resolve(data)));
 }
 
 module.exports = {
