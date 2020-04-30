@@ -532,16 +532,34 @@ function distinct(arr) {
  */
 // eslint-disable-next-line no-unused-vars
 function group(array, keySelector, valueSelector) {
+  // return array.reduce((acc, el) => {
+  //   const key = keySelector(el);
+  //   const val = valueSelector(el);
+  //   const arrFromKeys = acc[key] || [];
+  //   arrFromKeys.push(val);
+  //   acc[key] = arrFromKeys;
+  //   return acc;
+  // }, new Map());
   return array.reduce((acc, el) => {
     const key = keySelector(el);
     const val = valueSelector(el);
-    const arrFromKeys = acc.key || [];
+    const arrFromKeys = acc[key] || [];
     arrFromKeys.push(val);
-    acc.set(key, arrFromKeys);
+    acc[key] = arrFromKeys;
     return acc;
   }, {});
 }
 
+// console.log(group([
+//          { country: 'Belarus', city: 'Brest' },
+//          { country: 'Russia', city: 'Omsk' },
+//          { country: 'Russia', city: 'Samara' },
+//          { country: 'Belarus', city: 'Grodno' },
+//         { country: 'Belarus', city: 'Minsk' },
+//         { country: 'Poland', city: 'Lodz' }
+//         ],
+//        item => item.country,
+//        item => item.city));
 
 /**
  * Projects each element of the specified array to a sequence
@@ -605,29 +623,22 @@ function getElementByIndexes(arr, indexes) {
  *
  */
 function swapHeadAndTail(arr) {
-  // const middle = parseInt(arr.length / 2, 10) + (arr.length % 2 == 1 ? 0 : -1);
-  // return arr.map((el, i) => {
-  //   const diff = middle - i;
-  //   if (diff > 0 || (diff == 0 && !(arr.length % 2 == 1))) {
-  //     return arr[middle + i + 1];
-  //   } if (diff < 0) {
-  //     return arr[i - middle - 1];
-  //   }
-  //   return el;
-  // });
-  const middle = (arr.length / 2) % 2 == 0 ? arr.length / 2 : Math.floor(arr.length / 2) - 1;
+  if (arr.length === 1) {
+    return arr;
+  }
+  const isOdd = arr.length % 2;
+  const middle = isOdd == 0 ? arr.length / 2 : Math.floor(arr.length / 2);
   const head = arr.slice(0, middle);
-  const tail = arr.slice(middle);
+  const tail = isOdd == 0 ? arr.slice(middle) : arr.slice(middle + 1);
   let res;
-  if ((arr.length / 2) % 2 == 0) {
-    res = (tail).concat(head);
+  if (!isOdd) {
+    res = [].concat(tail, head);
   } else {
-    const mid = arr[middle];
-    res = [].concat(tail.push(mid), head);
+    tail.push(arr[middle]);
+    res = [].concat(tail, head);
   }
   return res;
 }
-
 
 module.exports = {
   findElement,

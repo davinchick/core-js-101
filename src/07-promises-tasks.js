@@ -29,19 +29,19 @@
  *                                                    //  Ask her again.';
  */
 function willYouMarryMe(isPositiveAnswer) {
-  const prom = new Promise((resolve, reject) => {
-    if (isPositiveAnswer) {
-      resolve('Hooray!!! She said "Yes"!');
-    } else if (!isPositiveAnswer) {
-      reject(new Error('Oh no, she said "No".'));
-    }
-  });
-  return prom;
+  // eslint-disable-next-line no-return-assign
+  // const prom = new Promise((resolve, reject) => {
+  if (isPositiveAnswer === true) {
+    return Promise.resolve('Hooray!!! She said "Yes"!').then((val) => val);
+  } if (isPositiveAnswer === false) {
+    return Promise.reject(new Error('Oh no, she said "No".')).then((val) => val);
+  }
+  return Promise.reject(new Error('Error: Wrong parameter is passed! Ask her again.')).catch((val) => val);
+  // });
+  // prom.then((result) => result, (result) => result)
+  // .catch(() => new Error('Error: Wrong parameter is passed! Ask her again.'));
 }
-willYouMarryMe().then(() => 'Hooray!!! She said "Yes"!', () => new Error('Oh no, she said "No".'))
-  .catch(() => new Error('Error: Wrong parameter is passed! Ask her again.'));
-
-
+console.log(willYouMarryMe(true));
 /**
  * Return Promise object that should be resolved with array containing plain values.
  * Function receive an array of Promise objects.
@@ -57,8 +57,8 @@ willYouMarryMe().then(() => 'Hooray!!! She said "Yes"!', () => new Error('Oh no,
  *    })
  *
  */
-function processAllPromises(/* array */) {
-  throw new Error('Not implemented');
+function processAllPromises(array) {
+  return Promise.all(array);
 }
 
 /**
@@ -80,8 +80,10 @@ function processAllPromises(/* array */) {
  *    })
  *
  */
-function getFastestPromise(/* array */) {
-  throw new Error('Not implemented');
+function getFastestPromise(array) {
+  return Promise.all(array)
+    .then((data) => data)
+    .catch((error) => error);
 }
 
 /**
@@ -101,8 +103,10 @@ function getFastestPromise(/* array */) {
  *    });
  *
  */
-function chainPromises(/* array, action */) {
-  throw new Error('Not implemented');
+function chainPromises(array, action) {
+  return Promise.race(array)
+    .then((data) => action(data))
+    .catch((error) => error);
 }
 
 module.exports = {
