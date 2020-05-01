@@ -29,16 +29,20 @@
  *                                                    //  Ask her again.';
  */
 function willYouMarryMe(isPositiveAnswer) {
-  if (typeof isPositiveAnswer === 'boolean') {
-    if (isPositiveAnswer) {
-      return Promise.resolve('Hooray!!! She said "Yes"!');
-    } if (!isPositiveAnswer) {
-      return Promise.reject(new Error('Oh no, she said "No".'));
+  return new Promise((resolve, reject) => {
+    if (typeof isPositiveAnswer === 'boolean') {
+      if (isPositiveAnswer) {
+        const ans = 'Hooray!!! She said "Yes"!';
+        resolve(ans);
+      } else {
+        reject(new Error('Oh no, she said "No".'));
+      }
+    } else {
+      reject(new Error('Wrong parameter is passed! Ask her again.'));
     }
-  }
-  return Promise.reject(new Error('Wrong parameter is passed! Ask her again.'));
+  });
 }
-console.log(willYouMarryMe(true));
+
 /**
  * Return Promise object that should be resolved with array containing plain values.
  * Function receive an array of Promise objects.
@@ -100,10 +104,8 @@ function getFastestPromise(array) {
  *
  */
 function chainPromises(array, action) {
-  return Promise.race(array)
-    .then((data) => action(data))
-    .catch((error) => error)
-    .then((data) => new Promise((resolve) => resolve(data)));
+  const res = array.reduce(action);
+  return Promise.all(res);
 }
 
 module.exports = {
