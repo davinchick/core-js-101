@@ -109,9 +109,12 @@ function memoize(func) {
  */
 function retry(func, attempts) {
   return () => {
-    for (let i = 0; i < attempts; i += 1) {
-      func();
+    let n = attempts;
+    if (n > 0) {
+      n -= 1;
+      return func();
     }
+    return n;
   };
 }
 
@@ -139,8 +142,11 @@ function retry(func, attempts) {
  * cos(3.141592653589793) ends
  *
  */
-function logger(/* func, logFunc */) {
-  throw new Error('Not implemented');
+function logger(func, logFunc) {
+  return function count(arg) {
+    const result = func(arg);
+    logFunc(result);
+  };
 }
 
 

@@ -33,13 +33,11 @@ function willYouMarryMe(isPositiveAnswer) {
     if (typeof isPositiveAnswer === 'boolean') {
       if (isPositiveAnswer) {
         const ans = 'Hooray!!! She said "Yes"!';
-        resolve(ans);
-      } else {
-        reject(new Error('Oh no, she said "No".'));
+        return resolve(ans);
       }
-    } else {
-      reject(new Error('Wrong parameter is passed! Ask her again.'));
+      return resolve('Oh no, she said "No".');
     }
+    return reject(new Error('Wrong parameter is passed! Ask her again.'));
   });
 }
 
@@ -104,8 +102,7 @@ function getFastestPromise(array) {
  *
  */
 function chainPromises(array, action) {
-  const res = array.reduce(action);
-  return Promise.all(res);
+  return Promise.all(array).then((data) => action(data));
 }
 
 module.exports = {
